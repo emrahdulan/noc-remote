@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS tasks(
+   id SERIAL PRIMARY KEY,
+   core_id INT UNIQUE NOT NULL,
+   name VARCHAR (50) NOT NULL,
+   target VARCHAR (50) NOT NULL,
+   resolve VARCHAR (50) NOT NULL,
+   is_active BOOLEAN NOT NULL,
+   test_id SMALLINT NOT NULL,
+   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX tasks_id ON tasks (id);
+CREATE UNIQUE INDEX tasks_cid ON tasks (core_id);
+CREATE UNIQUE INDEX tasks_is_active ON tasks (is_active);
+
+CREATE OR REPLACE FUNCTION task_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER task_updated_at_trigger
+BEFORE UPDATE ON tasks
+FOR EACH ROW
+EXECUTE FUNCTION task_updated_at();
