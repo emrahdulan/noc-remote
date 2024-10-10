@@ -14,3 +14,5 @@ tmp/
 
 # build output
 air
+
+config.env

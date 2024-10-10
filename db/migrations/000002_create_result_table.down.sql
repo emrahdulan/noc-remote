@@ -1,0 +1,3 @@
+DROP INDEX IF EXISTS ix_taskid_time;
+
+DROP TABLE IF EXISTS results;
